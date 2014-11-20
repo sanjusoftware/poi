@@ -1,4 +1,4 @@
-require "poi/version"
+require 'poi/version'
 
 module Poi
   # Your code goes here...
