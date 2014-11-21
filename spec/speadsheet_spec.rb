@@ -18,7 +18,7 @@ describe 'POI::Spreadsheet' do
       end
 
       it 'should create a cell range address object' do
-        # expect(create_excel_cell_range_address).to eq('dsd')
+        expect(create_excel_cell_range_address.valueOf('$A$2')).not_to be_nil
       end
 
       it 'should create a HSSFDataFormat object' do
