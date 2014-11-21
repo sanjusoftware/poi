@@ -1,5 +1,8 @@
+require 'poi/style'
+
 module Poi
   module Spreadsheet
+    include Poi::Style
 
     def create_excel_workbook(file = nil)
       file ? Rjb::import('org.apache.poi.hssf.usermodel.HSSFWorkbook').new(file) : Rjb::import('org.apache.poi.hssf.usermodel.HSSFWorkbook').new
