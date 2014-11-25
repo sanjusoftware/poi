@@ -56,6 +56,12 @@ describe 'POI::Powerpoint' do
         expect(ppt.getSlides().count).to eq(1)
       end
 
+      it 'should add slide to a given powerpoint with given text' do
+        ppt = create_ppt
+        slide = add_slide(ppt, 'slide title', 'body text')
+        expect(slide.getTitle()).to eq('slide title')
+      end
+
       it 'should reorder slides in the ppt' do
         file = File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'example_template.pptx')
         ppt = create_ppt(file)
@@ -90,7 +96,43 @@ describe 'POI::Powerpoint' do
         delete_slide(ppt, 1)
         expect(ppt.getSlides().count).to eq(1)
       end
+    end
 
+    context 'merge' do
+      it 'should merge given presentations into one presentation' do
+        ppt1 = create_ppt
+        add_slide(ppt1)
+        add_slide(ppt1)
+        add_slide(ppt1)
+        ppt2 = create_ppt
+        add_slide(ppt2)
+        add_slide(ppt2)
+        ppt3 = create_ppt
+        add_slide(ppt3)
+        add_slide(ppt3)
+
+        merged_ppt = merge_ppts([ppt1, ppt2, ppt3])
+        expect(merged_ppt.getSlides().count).to eq(ppt1.getSlides().count + ppt2.getSlides().count + ppt3.getSlides().count)
+      end
+
+      it 'should add slides from one presentation to another at given index' do
+        ppt1 = create_ppt
+        add_slide(ppt1, 'slide1 title1', 'slide1 text1')
+        add_slide(ppt1, 'slide1 title2')
+        add_slide(ppt1, 'slide1 title3')
+
+        ppt2 = create_ppt
+        add_slide(ppt2, 'slide2 title1')
+        add_slide(ppt2, 'slide2 title2')
+
+        merged_ppt = insert_ppt(ppt1, ppt2, 1)
+        slides = merged_ppt.getSlides()
+        expect(slides[0].getTitle()).to eq('slide1 title1')
+        expect(slides[1].getTitle()).to eq('slide2 title1')
+        expect(slides[2].getTitle()).to eq('slide2 title2')
+        expect(slides[3].getTitle()).to eq('slide1 title2')
+        expect(slides[4].getTitle()).to eq('slide1 title3')
+      end
     end
   end
 
