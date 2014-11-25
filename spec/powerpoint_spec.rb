@@ -132,6 +132,7 @@ describe 'POI::Powerpoint' do
         expect(slides[2].getTitle()).to eq('slide2 title2')
         expect(slides[3].getTitle()).to eq('slide1 title2')
         expect(slides[4].getTitle()).to eq('slide1 title3')
+        expect(merged_ppt.getSlides().count).to eq(ppt1.getSlides().count + ppt2.getSlides().count)
       end
     end
   end
