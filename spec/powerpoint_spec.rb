@@ -45,8 +45,8 @@ describe 'POI::Powerpoint' do
       it 'should save powerpoint' do
         ppt = create_ppt
         save_ppt(ppt)
-        expect(Rjb::import('java.io.File').new('my_test.pptx')).not_to be_nil
-        File.delete 'my_test.pptx'
+        expect(Rjb::import('java.io.File').new('my_presentation.pptx')).not_to be_nil
+        File.delete 'my_presentation.pptx'
       end
 
       it 'should add slide to a given powerpoint' do
@@ -68,6 +68,29 @@ describe 'POI::Powerpoint' do
         expect(ppt.getSlides()[1].getTitle()).to eq(slide2_title)
         expect(ppt.getSlides()[2].getTitle()).to eq(slide1_title)
       end
+
+      it 'should add picture to the slide' do
+        test_image = File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')
+        ppt = create_ppt
+        add_slide(ppt)
+        add_photo_to_slide(ppt, 0, File.new(test_image).bytes.to_a)
+        save_ppt(ppt, 'ppt_with_pic.pptx')
+        ppt1 = create_ppt('ppt_with_pic.pptx')
+        expect(File.new(test_image).bytes.to_a).to eq(ppt1.getAllPictures.get(0).getData.bytes.to_a)
+        File.delete 'ppt_with_pic.pptx'
+      end
+    end
+
+    context 'deleting' do
+      it 'should delete the given slide from the ppt' do
+        ppt = create_ppt
+        add_slide(ppt)
+        add_slide(ppt)
+        expect(ppt.getSlides().count).to eq(2)
+        delete_slide(ppt, 1)
+        expect(ppt.getSlides().count).to eq(1)
+      end
+
     end
   end
 

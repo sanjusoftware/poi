@@ -10,8 +10,8 @@ module Poi
       ppt.setPageSize(Rjb::import('java.awt.Dimension').new(height, width))
     end
 
-    def save_ppt(ppt)
-      out = poi_output_file('my_test.pptx')
+    def save_ppt(ppt, file_path = nil)
+      out = poi_output_file(file_path ? file_path : 'my_presentation.pptx')
       ppt.write(out)
       out.close()
     end
@@ -20,18 +20,19 @@ module Poi
       ppt.createSlide()
     end
 
+    def delete_slide(ppt, slide_index)
+      ppt.removeSlide(slide_index)
+    end
+
     def reorder_slides(ppt, options)
       return unless options
       options.each_key { |slide| ppt.setSlideOrder(slide, options[slide]) }
     end
 
-    def add_photo_to_slide(workbook, sheet, row, column, image)
-      picture_index = workbook.addPicture image, workbook.PICTURE_TYPE_JPEG
-      drawing = workbook.getSheet(sheet).createDrawingPatriarch
-      anchor = workbook.getCreationHelper.createClientAnchor
-      anchor.setCol1 column
-      anchor.setRow1 row
-      drawing.createPicture(anchor, picture_index).resize
+    def add_photo_to_slide(ppt, slide_index, image)
+      picture_index = ppt.addPicture(image, Rjb::import('org.apache.poi.xslf.usermodel.XSLFPictureData').PICTURE_TYPE_PNG)
+      slide = ppt.getSlides()[slide_index]
+      slide.createPicture(picture_index)
     end
 
     def create_spreadsheet(options, passed_styles = nil)
