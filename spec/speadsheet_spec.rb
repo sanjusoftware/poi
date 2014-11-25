@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'poi/spreadsheet'
 
 describe 'POI::Spreadsheet' do
 
@@ -24,21 +25,6 @@ describe 'POI::Spreadsheet' do
       it 'should create a HSSFDataFormat object' do
         reference_built_in_format = Rjb::import('org.apache.poi.hssf.usermodel.HSSFDataFormat').getBuiltinFormat("m/d/yy h:mm")
         expect(reference_built_in_format).to eq(hssf_data_format.getBuiltinFormat("m/d/yy h:mm"))
-      end
-
-      it 'should create a FileOutputStream object' do
-        expect(Rjb::import('java.io.FileOutputStream').new('foo').java_methods).to eq(poi_output_file('foo').java_methods)
-        File.delete 'foo'
-      end
-
-      it 'should create a byteArrayOutputStream object' do
-        expect(Rjb::import('java.io.ByteArrayOutputStream').new.java_methods).to eq(poi_byte_array_output_stream.java_methods)
-      end
-
-      it 'should create a FileInputStream object' do
-        poi_output_file('foo')
-        expect(Rjb::import('java.io.FileInputStream').new('foo').java_methods).to eq(poi_input_file('foo').java_methods)
-        File.delete 'foo'
       end
 
       it 'should create a image and place it on a worksheet' do

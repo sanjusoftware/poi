@@ -13,6 +13,16 @@ module Poi
     Rjb::load(classpath = Dir.glob(jardir).join(':'), jvmargs=['-Djava.awt.headless=true'])
   end
 
-end
+  def poi_output_file(file)
+    Rjb::import('java.io.FileOutputStream').new(file)
+  end
 
-require 'poi/spreadsheet'
+  def poi_byte_array_output_stream
+    Rjb::import('java.io.ByteArrayOutputStream').new
+  end
+
+  def poi_input_file(file)
+    Rjb::import('java.io.FileInputStream').new(file)
+  end
+
+end

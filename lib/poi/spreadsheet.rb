@@ -16,18 +16,6 @@ module Poi
       Rjb::import('org.apache.poi.hssf.usermodel.HSSFDataFormat')
     end
 
-    def poi_output_file(file)
-      Rjb::import('java.io.FileOutputStream').new(file)
-    end
-
-    def poi_byte_array_output_stream
-      Rjb::import('java.io.ByteArrayOutputStream').new
-    end
-
-    def poi_input_file(file)
-      Rjb::import('java.io.FileInputStream').new(file)
-    end
-
     def add_photo_to_sheet(workbook, sheet, row, column, image)
       picture_index = workbook.addPicture image, workbook.PICTURE_TYPE_JPEG
       drawing = workbook.getSheet(sheet).createDrawingPatriarch
