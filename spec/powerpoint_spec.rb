@@ -115,9 +115,9 @@ describe 'POI::Powerpoint' do
         expect(merged_ppt.getSlides().count).to eq(ppt1.getSlides().count + ppt2.getSlides().count + ppt3.getSlides().count)
       end
 
-      it 'should add slides from one presentation to another at given index' do
+      it 'should insert slides from one presentation to another at given index' do
         ppt1 = create_ppt
-        add_slide(ppt1, 'slide1 title1', 'slide1 text1')
+        add_slide(ppt1, 'slide1 title1')
         add_slide(ppt1, 'slide1 title2')
         add_slide(ppt1, 'slide1 title3')
 
@@ -133,6 +133,25 @@ describe 'POI::Powerpoint' do
         expect(slides[3].getTitle()).to eq('slide1 title2')
         expect(slides[4].getTitle()).to eq('slide1 title3')
         expect(merged_ppt.getSlides().count).to eq(ppt1.getSlides().count + ppt2.getSlides().count)
+      end
+
+      it 'should replace slide at a given index with slides from another presentation' do
+        ppt1 = create_ppt()
+        add_slide(ppt1, 'slide1 title1')
+        add_slide(ppt1, 'slide1 title2')
+        add_slide(ppt1, 'slide1 title3')
+
+        ppt2 = create_ppt
+        add_slide(ppt2, 'slide2 title1')
+        add_slide(ppt2, 'slide2 title2')
+
+        merged_ppt = insert_ppt(ppt1, ppt2, 1, true)
+        slides = merged_ppt.getSlides()
+        expect(slides[0].getTitle()).to eq('slide1 title1')
+        expect(slides[1].getTitle()).to eq('slide2 title1')
+        expect(slides[2].getTitle()).to eq('slide2 title2')
+        expect(slides[3].getTitle()).to eq('slide1 title3')
+        expect(merged_ppt.getSlides().count).to eq((ppt1.getSlides().count + ppt2.getSlides().count) - 1)
       end
     end
   end

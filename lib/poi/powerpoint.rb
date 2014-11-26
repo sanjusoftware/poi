@@ -21,13 +21,15 @@ module Poi
       merged_ppt
     end
 
-    def insert_ppt(ppt, ppt_to_insert, insert_at)
+    def insert_ppt(ppt, ppt_to_insert, insert_at, replace = false)
       merged_ppt = create_ppt
       ppt.getSlides().each_with_index do |slide, index|
         if index == insert_at
           merged_ppt = merge_ppts([merged_ppt, ppt_to_insert])
+          merged_ppt.createSlide().importContent(slide) unless replace
+        else
+          merged_ppt.createSlide().importContent(slide)
         end
-        merged_ppt.createSlide().importContent(slide)
       end
 
       merged_ppt
