@@ -31,10 +31,10 @@ describe 'POI::Spreadsheet' do
         test_image = File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')
         workbook = create_excel_workbook
         workbook.createSheet('sheet1')
-        add_photo_to_sheet(workbook, 'sheet1', 1, 1, File.new(test_image).bytes.to_a)
+        add_photo_to_sheet(workbook, 'sheet1', 1, 1, File.new(test_image).each_byte.to_a)
         workbook.write(poi_output_file('my_test.xls'))
         read_workbook = create_excel_workbook poi_input_file('my_test.xls')
-        expect(File.new(test_image).bytes.to_a).to eq(read_workbook.getAllPictures.get(0).getData.bytes.to_a)
+        expect(File.new(test_image).each_byte.to_a).to eq(read_workbook.getAllPictures.get(0).getData.each_byte.to_a)
         File.delete 'my_test.xls'
       end
     end
@@ -130,22 +130,22 @@ describe 'POI::Spreadsheet' do
       end
 
       it 'should add a photo to the workbook' do
-        file = File.new(File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')).bytes.to_a
+        file = File.new(File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')).each_byte.to_a
         workbook = create_spreadsheet([:sheet => {:name => 'sheet1', :photos => [:row => 1, :column => 1, :photo => file]}])
         workbook.write(poi_output_file('my_test.xls'))
         read_workbook = create_excel_workbook poi_input_file('my_test.xls')
-        expect(read_workbook.getAllPictures.get(0).getData.bytes.to_a).to eq(file)
+        expect(read_workbook.getAllPictures.get(0).getData.each_byte.to_a).to eq(file)
         File.delete 'my_test.xls'
       end
 
       it 'should add multiple photos to the workbook' do
-        file = File.new(File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')).bytes.to_a
+        file = File.new(File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')).each_byte.to_a
         workbook = create_spreadsheet([:sheet => {:name => 'sheet1', :photos => [{:row => 1, :column => 1,
                                                                                   :photo => file}, {:row => 100, :column => 1, :photo => file}]}])
         workbook.write(poi_output_file('my_test.xls'))
         read_workbook = create_excel_workbook poi_input_file('my_test.xls')
-        expect(read_workbook.getAllPictures.get(0).getData.bytes.to_a).to eq(file)
-        expect(read_workbook.getAllPictures.get(1).getData.bytes.to_a).to eq(file)
+        expect(read_workbook.getAllPictures.get(0).getData.each_byte.to_a).to eq(file)
+        expect(read_workbook.getAllPictures.get(1).getData.each_byte.to_a).to eq(file)
         File.delete 'my_test.xls'
       end
     end

@@ -79,10 +79,10 @@ describe 'POI::Powerpoint' do
         test_image = File.join(File.dirname(File.dirname(__FILE__)), 'spec', 'data', 'image001.jpg')
         ppt = create_ppt
         add_slide(ppt)
-        add_photo_to_slide(ppt, 0, File.new(test_image).bytes.to_a)
+        add_photo_to_slide(ppt, 0, File.new(test_image).each_byte.to_a)
         save_ppt(ppt, 'ppt_with_pic.pptx')
         ppt1 = create_ppt('ppt_with_pic.pptx')
-        expect(File.new(test_image).bytes.to_a).to eq(ppt1.getAllPictures.get(0).getData.bytes.to_a)
+        expect(File.new(test_image).each_byte.to_a).to eq(ppt1.getAllPictures.get(0).getData.each_byte.to_a)
         File.delete 'ppt_with_pic.pptx'
       end
     end
